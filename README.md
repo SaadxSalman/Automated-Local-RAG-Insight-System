@@ -1,7 +1,9 @@
 
 ---
 
-![](ALRIS.png)
+<p align="center">
+  <img src="ALRIS.png" alt="ALRIS Logo" width="600">
+</p>
 
 # Automated-Local-RAG-Insight-System (ALRIS) 🔍🧠
 
