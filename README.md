@@ -19,6 +19,17 @@ Built with **Node.js**, **Weaviate**, and **Hugging Face**, this project demonst
 
 ---
 
+## 🌟 Real-World Use Cases
+
+Since ALRIS understands context rather than just matching words, it can be used for far more than a simple search bar:
+
+* **📚 Personal Knowledge "Brain":** For students and researchers managing hundreds of PDFs. Ask: *"What are the three main criticisms of the paper on Quantum Computing I saved last month?"*
+* **📁 Instant Technical Documentation Assistant:** Point ALRIS at your GitHub repositories' `/docs` folders. Ask: *"How do I configure the authentication middleware in our internal API?"*
+* **⚖️ Legal & Contract Analysis:** Drop lease agreements or contracts into the `/data` folder. Ask: *"What is the notice period for terminating this contract, and are there any hidden fees?"*
+* **✍️ Content Creation & Writing Partner:** Maintain consistency in your creative work. Ask: *"How did I describe the protagonist's childhood in the first three chapters?"*
+
+---
+
 ## 🛠️ Tech Stack
 
 * **Backend:** Node.js, Express.js
@@ -49,15 +60,15 @@ graph LR
 
 ```text
 Automated-Local-RAG-Insight-System/
-├── data/               # Place your local documents here
+├── data/                # Place your local documents here
 ├── src/
-│   ├── index.js        # Express API & Search Logic
-│   └── ingest.js       # File reading & Vectorization script
-├── public/
-│   └── index.html      # Tailwind-powered frontend
-├── .env                # API Keys (Hugging Face & Weaviate)
-├── .gitignore          # Secret management
-└── package.json        # Dependencies
+│   ├── index.js         # Express API & Search Logic
+│   └── ingest.js        # File reading & Vectorization script
+├── frontend/            # Tailwind-powered user interface
+│   └── index.html       
+├── .env                 # API Keys (Hugging Face & Weaviate)
+├── .gitignore           # Secret management
+└── package.json         # Dependencies
 
 ```
 
@@ -111,11 +122,14 @@ Open `http://localhost:3000` in your browser.
 
 ---
 
-## 🛠️ Roadmap / Challenges Overcome
+## 🛠️ Roadmap & Challenges Overcome
 
 * [x] **File Parsing:** Implemented `pdf-parse` to handle binary PDF formats alongside text.
 * [x] **Chunking Strategy:** Implemented fixed-size character chunking to ensure optimal vector embedding quality.
 * [x] **Metadata Preservation:** Integrated file creation dates and extensions into the Weaviate schema.
+* [ ] **Watch Folder:** Implement `chokidar` to automatically run `ingest.js` when new files are dropped into `/data`.
+* [ ] **Chat History:** Save conversation logs to a local JSON file for session persistence.
+* [ ] **Source Citations:** Update the UI so clicking a source card opens the local file to the correct page/section.
 
 ---
 
@@ -125,5 +139,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-**Developed with ❤️ by [saadxsalman**](https://www.google.com/search?q=https://github.com/saadxsalman)
+Developed with ❤️ by [** Saad Salman**](https://www.google.com/search?q=https://github.com/saadxsalman)
+
 ---

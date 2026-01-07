@@ -1,0 +1,37 @@
+{
+  "name": "automated-local-rag-insight-system",
+  "version": "1.0.0",
+  "description": "High-performance full-stack RAG engine using Node.js, Weaviate, and Hugging Face.",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "ingest": "node src/ingest.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SaadxSalman/Automated-Local-RAG-Insight-System.git"
+  },
+  "keywords": [
+    "rag",
+    "weaviate",
+    "huggingface",
+    "nodejs",
+    "vector-database"
+  ],
+  "author": "saadxsalman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SaadxSalman/Automated-Local-RAG-Insight-System/issues"
+  },
+  "homepage": "https://github.com/SaadxSalman/Automated-Local-RAG-Insight-System#readme",
+  "dependencies": {
+    "@huggingface/inference": "^2.8.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "glob": "^11.0.0",
+    "pdf-parse": "^1.1.1",
+    "weaviate-client": "^3.1.2"
+  }
+}
