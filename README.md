@@ -1,6 +1,8 @@
 
 ---
 
+![](ALRIS.png)
+
 # Automated-Local-RAG-Insight-System (ALRIS) 🔍🧠
 
 **ALRIS** is a high-performance, full-stack Retrieval-Augmented Generation (RAG) engine designed to transform your local file system into a searchable intelligence hub. Unlike traditional keyword search, ALRIS uses **Vector Embeddings** to understand the semantic meaning of your `.pdf`, `.md`, and `.txt` files.
