@@ -28,11 +28,13 @@
   "homepage": "https://github.com/SaadxSalman/Automated-Local-RAG-Insight-System#readme",
   "dependencies": {
     "@huggingface/inference": "^2.8.1",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "glob": "^11.0.0",
-    "pdf-parse": "^1.1.1",
-    "weaviate-client": "^3.1.2"
-  },
-  "devDependencies": {}
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1",
+    "glob": "^11.1.0",
+    "lodash": "^4.17.21",
+    "pdf-parse": "^1.1.4",
+    "weaviate-client": "^3.1.2",
+    "weaviate-ts-client": "^2.2.0"
+  }
 }
