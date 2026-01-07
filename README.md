@@ -7,19 +7,19 @@
 
 # Automated-Local-RAG-Insight-System (ALRIS) 🔍🧠
 
-**ALRIS** is a high-performance, full-stack Retrieval-Augmented Generation (RAG) engine designed to transform your local file system into a searchable intelligence hub. Unlike traditional keyword search, ALRIS uses **Vector Embeddings** to understand the semantic meaning of your `.pdf`, `.md`, and `.txt` files.
+**ALRIS** is a high-performance, full-stack Retrieval-Augmented Generation (RAG) engine designed to transform your local file system into a searchable intelligence hub. By leveraging **Vector Embeddings**, ALRIS understands the semantic intent behind your queries rather than relying on simple keyword matching.
 
-Built with **Node.js**, **Weaviate**, and **Hugging Face**, this project demonstrates a private, local-first approach to AI-driven document retrieval.
+Built with **Node.js**, **Weaviate**, and **Hugging Face**, this project offers a private, local-first approach to AI-driven document retrieval and analysis.
 
 ---
 
 ## 🚀 Key Features
 
-* **Deep Content Indexing:** Automatically reads and chunks data from multiple file formats.
-* **Semantic Search:** Uses Hugging Face transformer models to find information based on *intent*, not just keywords.
-* **Vectorized Storage:** Leverages Weaviate Cloud for ultra-fast high-dimensional vector similarity searches.
-* **Modern UI:** A clean, responsive search interface built with Tailwind CSS.
-* **Privacy Focused:** Keeps your data local; only processed vectors are sent to the cloud for retrieval.
+* **Multi-Format Ingestion:** Seamlessly processes `.pdf`, `.md`, and `.txt` files using `pdf-parse`.
+* **Semantic Intelligence:** Powered by Hugging Face `sentence-transformers` for high-accuracy vector embeddings.
+* **Vectorized Storage:** Uses Weaviate for lightning-fast similarity searches and metadata management.
+* **Modern Dashboard:** A responsive, dark-mode UI built with Tailwind CSS for an intuitive search experience.
+* **Privacy-Centric:** Your raw data stays local; only anonymized vectors are used for indexing.
 
 ---
 
@@ -34,29 +34,15 @@ Since ALRIS understands context rather than just matching words, it can be used 
 
 ---
 
-## 🛠️ Tech Stack
+## 📐 Architecture
 
-* **Backend:** Node.js, Express.js
-* **Database:** Weaviate (Vector Database)
-* **AI/LLM:** Hugging Face Inference API (Embeddings & Text2Vec)
-* **File Processing:** `pdf-parse`, `glob`, `fs`
-* **Frontend:** HTML5, Tailwind CSS
 
----
 
-## 📐 How It Works (RAG Architecture)
-
-```mermaid
-graph LR
-    A[Local Files .pdf, .md] --> B[Node.js Ingestion Script]
-    B --> C[Hugging Face Embeddings]
-    C --> D[Weaviate Vector DB]
-    E[User Query] --> F[Express.js Server]
-    F --> G[Vector Search]
-    G --> D
-    D --> H[Relevant Results Returned]
-
-```
+The system follows a standard RAG pipeline:
+1.  **Ingestion:** Local files are read and split into manageable chunks.
+2.  **Embedding:** Chunks are sent to Hugging Face Inference API to generate 384-dimensional vectors.
+3.  **Storage:** Vectors and metadata are stored in a Weaviate "Document" class.
+4.  **Retrieval:** User queries are vectorized and compared against the DB using Cosine Similarity.
 
 ---
 
@@ -64,15 +50,17 @@ graph LR
 
 ```text
 Automated-Local-RAG-Insight-System/
-├── data/                # Place your local documents here
+├── data/                # Source documents (.pdf, .md, .txt)
 ├── src/
-│   ├── index.js         # Express API & Search Logic
-│   └── ingest.js        # File reading & Vectorization script
-├── frontend/            # Tailwind-powered user interface
-│   └── index.html       
-├── .env                 # API Keys (Hugging Face & Weaviate)
-├── .gitignore           # Secret management
-└── package.json         # Dependencies
+│   ├── index.js         # Express.js API Server
+│   ├── ingest.js        # File processing & Vectorization script
+│   └── weaviateClient.js# Weaviate & Hugging Face configuration
+├── frontend/
+│   └── index.html       # Tailwind CSS search interface
+├── .env                 # API Keys & Secrets
+├── .gitignore           # Prevents sensitive data leakage
+├── package.json         # Project dependencies
+└── README.md            # Project documentation
 
 ```
 
@@ -80,69 +68,69 @@ Automated-Local-RAG-Insight-System/
 
 ## ⚙️ Installation & Setup
 
-### 1. Clone the repository
+### 1. Prerequisites
+
+* Node.js (v18+)
+* A [Weaviate Cloud](https://console.weaviate.cloud/) Cluster (Free Tier works great!)
+* A [Hugging Face](https://huggingface.co/settings/tokens) API Token.
+
+### 2. Clone and Install
 
 ```bash
-git clone https://github.com/saadxsalman/Automated-Local-RAG-Insight-System.git
+git clone [https://github.com/saadxsalman/Automated-Local-RAG-Insight-System.git](https://github.com/saadxsalman/Automated-Local-RAG-Insight-System.git)
 cd Automated-Local-RAG-Insight-System
-
-```
-
-### 2. Install Dependencies
-
-```bash
 npm install
 
 ```
 
-### 3. Environment Variables
+### 3. Environment Configuration
 
-Create a `.env` file in the root and add your credentials:
+Create a `.env` file in the root directory:
 
 ```env
 HUGGINGFACE_API_KEY=your_hf_token
 WEAVIATE_URL=your_weaviate_cluster_url
 WEAVIATE_API_KEY=your_weaviate_api_key
+PORT=3000
 
 ```
 
-### 4. Index Your Files
+### 4. Run the Engine
 
-Place your documents in the `/data` folder, then run the ingestion script:
+**Step A: Index your documents** (Ensure your files are in the `/data` folder):
 
 ```bash
 node src/ingest.js
 
 ```
 
-### 5. Launch the System
+**Step B: Start the UI Server:**
 
 ```bash
 node src/index.js
 
 ```
 
-Open `http://localhost:3000` in your browser.
+Visit `http://localhost:3000` to start querying.
 
 ---
 
-## 🛠️ Roadmap & Challenges Overcome
+## 🛠️ Tech Stack
 
-* [x] **File Parsing:** Implemented `pdf-parse` to handle binary PDF formats alongside text.
-* [x] **Chunking Strategy:** Implemented fixed-size character chunking to ensure optimal vector embedding quality.
-* [x] **Metadata Preservation:** Integrated file creation dates and extensions into the Weaviate schema.
-* [ ] **Watch Folder:** Implement `chokidar` to automatically run `ingest.js` when new files are dropped into `/data`.
-* [ ] **Chat History:** Save conversation logs to a local JSON file for session persistence.
-* [ ] **Source Citations:** Update the UI so clicking a source card opens the local file to the correct page/section.
-
----
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
+* **Runtime:** Node.js
+* **Backend:** Express.js
+* **Vector Database:** Weaviate
+* **Embeddings:** Hugging Face (all-MiniLM-L6-v2)
+* **Styling:** Tailwind CSS
 
 ---
 
-Developed with ❤️ by [**Saad Salman**](https://www.google.com/search?q=https://github.com/saadxsalman)
+## 🌟 Use Cases
+
+* **Research:** Search through hundreds of academic PDFs for specific concepts.
+* **DevDocs:** Turn a folder of Markdown documentation into a searchable assistant.
+* **Legal:** Analyze contracts and identify clauses based on context.
 
 ---
+
+Developed with ❤️ by **[Saad Salman](https://www.google.com/search?q=https://github.com/saadxsalman)**
