@@ -139,6 +139,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-Developed with ❤️ by [** Saad Salman**](https://www.google.com/search?q=https://github.com/saadxsalman)
+Developed with ❤️ by [**Saad Salman**](https://www.google.com/search?q=https://github.com/saadxsalman)
 
 ---
