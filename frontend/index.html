@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>ALRIS 🔍</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white min-h-screen p-8">
+    <div class="max-w-3xl mx-auto">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-blue-400">ALRIS 🔍🧠</h1>
+            <p class="text-slate-400 mt-2">Automated Local RAG Insight System</p>
+        </header>
+
+        <div class="bg-slate-800 p-6 rounded-xl shadow-xl">
+            <input id="query" type="text" placeholder="Ask your local files..." 
+                   class="w-full bg-slate-700 border-none rounded-lg p-4 text-white focus:ring-2 focus:ring-blue-500 outline-none">
+            <button onclick="ask()" class="w-full mt-4 bg-blue-600 hover:bg-blue-500 font-bold py-3 rounded-lg transition">
+                Search Intelligence
+            </button>
+        </div>
+
+        <div id="loading" class="hidden mt-8 text-center text-blue-400 animate-pulse">Consulting the brain...</div>
+
+        <div id="responseContainer" class="hidden mt-8 space-y-4">
+            <div class="bg-slate-800 p-6 rounded-xl border-l-4 border-blue-500">
+                <h3 class="text-sm font-bold uppercase text-slate-500 mb-2">Insight</h3>
+                <p id="answer" class="leading-relaxed"></p>
+            </div>
+            <div id="sources" class="text-xs text-slate-500 italic"></div>
+        </div>
+    </div>
+
+    <script>
+        async function ask() {
+            const question = document.getElementById('query').value;
+            const loader = document.getElementById('loading');
+            const container = document.getElementById('responseContainer');
+            
+            loader.classList.remove('hidden');
+            container.classList.add('hidden');
+
+            const res = await fetch('/ask', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ question })
+            });
+
+            const data = await res.json();
+            
+            document.getElementById('answer').innerText = data.answer;
+            document.getElementById('sources').innerText = "Sources: " + data.sources.join(', ');
+            
+            loader.classList.add('hidden');
+            container.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
