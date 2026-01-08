@@ -4,7 +4,6 @@ import pdf from '@cedrugs/pdf-parse'; // Updated package
 import { setupCollection } from './weaviateClient.js';
 
 async function ingest() {
-  const collection = await setupCollection();
   const dataDir = path.join(process.cwd(), 'data');
   
   if (!fs.existsSync(dataDir)) {
@@ -15,6 +14,10 @@ async function ingest() {
   const files = fs.readdirSync(dataDir);
 
   for (const file of files) {
+    // Sanitize filename for Weaviate Collection Name (must be alphanumeric and start with uppercase)
+    const sanitizedName = file.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9]/g, "");
+    const collectionName = sanitizedName.charAt(0).toUpperCase() + sanitizedName.slice(1);
+
     const filePath = path.join(dataDir, file);
     let text = '';
 
@@ -23,7 +26,6 @@ async function ingest() {
     try {
       if (file.endsWith('.pdf')) {
         const dataBuffer = fs.readFileSync(filePath);
-        // @cedrugs/pdf-parse works similarly to the original pdf-parse
         const data = await pdf(dataBuffer);
         text = data.text.replace(/\s+/g, ' ').trim(); 
       } else {
@@ -34,6 +36,9 @@ async function ingest() {
         console.error(`⚠️ Warning: Insufficient text extracted from ${file}.`);
         continue;
       }
+
+      // Initialize collection based on the filename
+      const collection = await setupCollection(collectionName);
 
       console.log(`📄 Content Preview: "${text.substring(0, 100)}..."`);
 
@@ -57,7 +62,7 @@ async function ingest() {
         });
       }
       
-      console.log(`✅ Indexed ${chunks.length} chunks for ${file}\n`);
+      console.log(`✅ Indexed ${chunks.length} chunks into collection: ${collectionName} for ${file}\n`);
 
     } catch (error) {
       console.error(`❌ Error processing ${file}:`, error.message);

@@ -7,8 +7,7 @@ dotenv.config();
 // 1. Initialize Hugging Face for Summarization
 export const hf = new HfInference(process.env.HUGGINGFACE_API_KEY);
 
-// 2. Initialize Weaviate Client with stability fixes
-// We add 'skipInitChecks' and a higher timeout to solve the gRPC health check error
+// 2. Initialize Weaviate Client
 const client = await weaviate.connectToWeaviateCloud(process.env.WEAVIATE_URL, {
   authCredentials: new weaviate.ApiKey(process.env.WEAVIATE_API_KEY),
   skipInitChecks: true, 
@@ -17,16 +16,14 @@ const client = await weaviate.connectToWeaviateCloud(process.env.WEAVIATE_URL, {
     query: 60,
   },
   headers: {
-    'X-HuggingFace-Api-Key': process.env.HUGGINGFACE_API_KEY, // Pass key for vectorization
+    'X-HuggingFace-Api-Key': process.env.HUGGINGFACE_API_KEY,
   }
 });
 
 /**
- * Sets up the Weaviate collection with the correct vectorizer configuration.
+ * Sets up the Weaviate collection with a dynamic name based on the file.
  */
-export async function setupCollection() {
-  const collectionName = 'ALRIS_Documents';
-  
+export async function setupCollection(collectionName) {
   try {
     // Check if collection exists
     const exists = await client.collections.exists(collectionName);
@@ -44,7 +41,7 @@ export async function setupCollection() {
         weaviate.configure.vectors.text2VecHuggingFace({
           name: 'content_vector',
           sourceProperties: ['content'],
-          model: 'Snowflake/snowflake-arctic-embed-l-v2.0', // Your high-performance model
+          model: 'Snowflake/snowflake-arctic-embed-l-v2.0',
         }),
       ],
       properties: [
@@ -62,7 +59,7 @@ export async function setupCollection() {
       ],
     });
   } catch (error) {
-    console.error("❌ Error setting up Weaviate collection:", error);
+    console.error(`❌ Error setting up collection ${collectionName}:`, error);
     throw error;
   }
 }
