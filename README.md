@@ -152,7 +152,7 @@ Visit `http://localhost:3000` to start querying.
 * **Backend:** Express.js
 * **Frontend:** Next.js (React), Tailwind CSS
 * **Vector Database:** Weaviate
-* **Embeddings:** Hugging Face (all-MiniLM-L6-v2)
+* **Embeddings:** Snowflake: Arctic M v1.5
 
 ---
 
