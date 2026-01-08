@@ -15,7 +15,7 @@ Built with **Node.js**, **Weaviate Cloud**, and **Hugging Face**, this project o
 
 ## 🚀 Key Features
 
-* **Multi-Format Ingestion:** Seamlessly processes `.pdf`, `.md`, and `.txt` files with intelligent sliding-window chunking.
+* **Multi-Format Ingestion:** Seamlessly processes `.pdf` files with intelligent sliding-window chunking.
 * **Hybrid Retrieval:** Balances Vector Similarity (semantic) and BM25 (keyword) search with a tuned  for optimal results.
 * **Llama-3.2 Powered:** Utilizes `Llama-3.2-3B-Instruct` for concise, context-aware synthesis of your data.
 * **High-Performance Embeddings:** Powered by `Snowflake/snowflake-arctic-embed-l-v2.0` for high-dimensional semantic mapping.
