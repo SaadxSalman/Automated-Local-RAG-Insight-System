@@ -153,5 +153,3 @@ npm run dev
 Developed with ❤️ by **[Saad Salman](https://www.google.com/search?q=https://github.com/saadxsalman)**
 
 ---
-
-**Would you like me to create a Troubleshooting section for common Weaviate connection errors or a contribution guide?**
