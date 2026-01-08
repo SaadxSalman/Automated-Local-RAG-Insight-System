@@ -1,8 +1,6 @@
 
----
-
 <p align="center">
-  <img src="ALRIS.png" alt="ALRIS Logo" width="600">
+<img src="ALRIS.png" alt="ALRIS Logo" width="600">
 </p>
 
 # Automated-Local-RAG-Insight-System (ALRIS) 🔍🧠
@@ -18,7 +16,7 @@ Built with **Node.js**, **Weaviate**, and **Hugging Face**, this project offers 
 * **Multi-Format Ingestion:** Seamlessly processes `.pdf`, `.md`, and `.txt` files using `pdf-parse`.
 * **Semantic Intelligence:** Powered by Hugging Face `sentence-transformers` for high-accuracy vector embeddings.
 * **Vectorized Storage:** Uses Weaviate for lightning-fast similarity searches and metadata management.
-* **Modern Dashboard:** A responsive, dark-mode UI built with Tailwind CSS for an intuitive search experience.
+* **Modern Dashboard:** A professional **Next.js** frontend with a responsive, dark-mode UI and Lucide icons.
 * **Privacy-Centric:** Your raw data stays local; only anonymized vectors are used for indexing.
 
 ---
@@ -36,13 +34,12 @@ Since ALRIS understands context rather than just matching words, it can be used 
 
 ## 📐 Architecture
 
-
-
 The system follows a standard RAG pipeline:
-1.  **Ingestion:** Local files are read and split into manageable chunks.
-2.  **Embedding:** Chunks are sent to Hugging Face Inference API to generate 384-dimensional vectors.
-3.  **Storage:** Vectors and metadata are stored in a Weaviate "Document" class.
-4.  **Retrieval:** User queries are vectorized and compared against the DB using Cosine Similarity.
+
+1. **Ingestion:** Local files are read and split into manageable chunks.
+2. **Embedding:** Chunks are sent to Hugging Face Inference API to generate 384-dimensional vectors.
+3. **Storage:** Vectors and metadata are stored in a Weaviate "Document" class.
+4. **Retrieval:** User queries are vectorized and compared against the DB using Cosine Similarity.
 
 ---
 
@@ -50,18 +47,31 @@ The system follows a standard RAG pipeline:
 
 ```text
 Automated-Local-RAG-Insight-System/
-├── data/                # Source documents (.pdf, .md, .txt)
-├── src/
-│   ├── index.js         # Express.js API Server
-│   ├── ingest.js        # File processing & Vectorization script
-│   └── weaviateClient.js# Weaviate & Hugging Face configuration
-├── frontend/
-│   └── index.html       # Tailwind CSS search interface
-├── .env                 # API Keys & Secrets
-├── .gitignore           # Prevents sensitive data leakage
-├── package.json         # Project dependencies
-└── README.md            # Project documentation
-
+├── backend/                # Your existing Express/Node.js logic
+│   ├── data/               # Source documents (.pdf, .md, .txt)
+│   ├── src/
+│   │   ├── index.js        # Updated Express API with CORS
+│   │   ├── ingest.js       # Ingestion script
+│   │   └── weaviateClient.js
+│   ├── .env                # Backend keys (WEAVIATE_API_KEY, HF_KEY)
+│   └── package.json
+│
+├── frontend/               # The new Next.js application
+│   ├── public/             # Static assets (logo, icons)
+│   ├── src/
+│   │   ├── app/            # App Router (Next.js 13/14/15+)
+│   │   │   ├── layout.tsx  # Global fonts and metadata
+│   │   │   ├── page.tsx    # The modern search UI (code provided earlier)
+│   │   │   └── globals.css # Tailwind directives
+│   │   ├── components/     # Reusable UI components (optional)
+│   │   └── lib/            # Utility functions (API fetchers)
+│   ├── .env.local          # Frontend vars (NEXT_PUBLIC_API_URL)
+│   ├── next.config.js
+│   ├── tailwind.config.js
+│   └── package.json
+│
+├── README.md               # Documentation
+└── .gitignore              # Ignores node_modules and .env files
 ```
 
 ---
@@ -77,37 +87,58 @@ Automated-Local-RAG-Insight-System/
 ### 2. Clone and Install
 
 ```bash
-git clone [https://github.com/saadxsalman/Automated-Local-RAG-Insight-System.git](https://github.com/saadxsalman/Automated-Local-RAG-Insight-System.git)
+git clone https://github.com/saadxsalman/Automated-Local-RAG-Insight-System.git
 cd Automated-Local-RAG-Insight-System
-npm install
+
+# Install Backend Dependencies
+cd backend && npm install
+
+# Install Frontend Dependencies
+cd ../frontend && npm install
 
 ```
 
 ### 3. Environment Configuration
 
-Create a `.env` file in the root directory:
+**Backend (`backend/.env`):**
 
 ```env
 HUGGINGFACE_API_KEY=your_hf_token
 WEAVIATE_URL=your_weaviate_cluster_url
 WEAVIATE_API_KEY=your_weaviate_api_key
-PORT=3000
+PORT=3001
+
+```
+
+**Frontend (`frontend/.env.local`):**
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3001
 
 ```
 
 ### 4. Run the Engine
 
-**Step A: Index your documents** (Ensure your files are in the `/data` folder):
+**Step A: Index your documents** (Ensure your files are in `backend/data`):
 
 ```bash
+cd backend
 node src/ingest.js
 
 ```
 
-**Step B: Start the UI Server:**
+**Step B: Start the Backend Server:**
 
 ```bash
 node src/index.js
+
+```
+
+**Step C: Start the Next.js UI:**
+
+```bash
+cd ../frontend
+npm run dev
 
 ```
 
@@ -119,9 +150,9 @@ Visit `http://localhost:3000` to start querying.
 
 * **Runtime:** Node.js
 * **Backend:** Express.js
+* **Frontend:** Next.js (React), Tailwind CSS
 * **Vector Database:** Weaviate
 * **Embeddings:** Hugging Face (all-MiniLM-L6-v2)
-* **Styling:** Tailwind CSS
 
 ---
 
