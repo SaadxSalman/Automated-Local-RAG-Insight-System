@@ -1,14 +1,26 @@
 {
-  "name": "alris",
+  "name": "automated-local-rag-insight-system",
   "version": "1.0.0",
+  "description": "ALRIS Backend",
+  "main": "src/index.js",
   "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SaadxSalman/Automated-Local-RAG-Insight-System.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
+    "@cedrugs/pdf-parse": "^1.0.0",
     "@huggingface/inference": "^4.13.5",
     "cors": "^2.8.5",
-    "dotenv": "^16.6.1",
-    "express": "^4.22.1",
-    "lucide-react": "^0.562.0",
-    "pdf-parse": "^1.1.4",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
     "weaviate-client": "^3.10.0"
   }
 }

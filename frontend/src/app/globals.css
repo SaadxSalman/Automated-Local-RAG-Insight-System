@@ -1,78 +1,30 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter);
+}
 
 :root {
   --background: #0b0f1a;
   --foreground: #f8fafc;
 }
 
-@layer base {
-  body {
-    @apply bg-[#0B0F1A] text-slate-200 antialiased;
-    font-feature-settings: "ss01", "ss02", "cv01", "cv03";
-  }
+body {
+  background-color: #0b0f1a;
+  color: #f8fafc;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@layer components {
-  /* Custom loading bar animation for the "Processing" state */
-  @keyframes progress {
-    0% {
-      transform: translateX(-100%);
-    }
-    50% {
-      transform: translateX(0%);
-    }
-    100% {
-      transform: translateX(100%);
-    }
-  }
-
-  .animate-loading {
-    animation: progress 2s ease-in-out infinite;
-  }
+/* Custom loading bar animation for the "Processing" state */
+@keyframes progress {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0%); }
+  100% { transform: translateX(100%); }
 }
 
-/* Scrollbar Styling for a cleaner Dark UI */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0b0f1a;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #334155;
-}
-
-/* Tailwind Animate Plugin Fallbacks */
-/* If you don't have tailwindcss-animate installed, these ensure your page works */
-.animate-in {
-  animation-duration: 500ms;
-  animation-fill-mode: forwards;
-  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.fade-in {
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  animation-name: fadeIn;
-}
-
-.slide-in-from-bottom-4 {
-  @keyframes slideIn {
-    from { transform: translateY(1rem); }
-    to { transform: translateY(0); }
-  }
-  animation-name: slideIn;
+.animate-loading {
+  animation: progress 2s ease-in-out infinite;
 }
 
 /* Selection Highlight */

@@ -1,13 +1,17 @@
 import fs from 'fs';
 import path from 'path';
-import pdf from 'pdf-parse';
+import pdf from '@cedrugs/pdf-parse'; // Updated package
 import { setupCollection } from './weaviateClient.js';
 
 async function ingest() {
   const collection = await setupCollection();
   const dataDir = path.join(process.cwd(), 'data');
   
-  if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir);
+  if (!fs.existsSync(dataDir)) {
+    console.log('📁 Creating data directory...');
+    fs.mkdirSync(dataDir);
+  }
+
   const files = fs.readdirSync(dataDir);
 
   for (const file of files) {
@@ -16,37 +20,48 @@ async function ingest() {
 
     console.log(`🔍 Processing: ${file}`);
 
-    if (file.endsWith('.pdf')) {
-      const dataBuffer = fs.readFileSync(filePath);
-      const data = await pdf(dataBuffer);
-      text = data.text.replace(/\s+/g, ' '); // Clean extra whitespace
-    } else {
-      text = fs.readFileSync(filePath, 'utf8');
-    }
+    try {
+      if (file.endsWith('.pdf')) {
+        const dataBuffer = fs.readFileSync(filePath);
+        // @cedrugs/pdf-parse works similarly to the original pdf-parse
+        const data = await pdf(dataBuffer);
+        text = data.text.replace(/\s+/g, ' ').trim(); 
+      } else {
+        text = fs.readFileSync(filePath, 'utf8').trim();
+      }
 
-    if (!text || text.length < 20) {
-      console.error(`⚠️ Warning: No text extracted from ${file}. Check if it's an image-based PDF.`);
-      continue;
-    }
+      if (!text || text.length < 20) {
+        console.error(`⚠️ Warning: Insufficient text extracted from ${file}.`);
+        continue;
+      }
 
-    // Show a small preview to verify content
-    console.log(`📄 Content Preview: "${text.substring(0, 100)}..."`);
+      console.log(`📄 Content Preview: "${text.substring(0, 100)}..."`);
 
-    // Recursive-style chunking (2000 chars with 200 char overlap)
-    const chunkSize = 2000;
-    const overlap = 200;
-    let chunks = [];
-    
-    for (let i = 0; i < text.length; i += chunkSize - overlap) {
-      chunks.push(text.substring(i, i + chunkSize));
-    }
+      // Chunking logic
+      const chunkSize = 2000;
+      const overlap = 200;
+      let chunks = [];
+      
+      for (let i = 0; i < text.length; i += chunkSize - overlap) {
+        const chunk = text.substring(i, i + chunkSize);
+        if (chunk.length > 0) chunks.push(chunk);
+      }
 
-    for (const chunk of chunks) {
-      await collection.data.insert({
-        properties: { content: chunk, fileName: file }
-      });
+      // Batching or sequential insertion
+      for (const chunk of chunks) {
+        await collection.data.insert({
+          properties: { 
+            content: chunk, 
+            fileName: file 
+          }
+        });
+      }
+      
+      console.log(`✅ Indexed ${chunks.length} chunks for ${file}\n`);
+
+    } catch (error) {
+      console.error(`❌ Error processing ${file}:`, error.message);
     }
-    console.log(`✅ Indexed ${chunks.length} chunks for ${file}\n`);
   }
 }
 
