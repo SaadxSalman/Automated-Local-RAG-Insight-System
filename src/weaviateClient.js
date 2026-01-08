@@ -52,6 +52,7 @@ export async function setupCollection() {
           name: 'content', 
           dataType: 'text',
           description: 'The text chunk from the document',
+          tokenization: 'word',
         },
         { 
           name: 'fileName', 

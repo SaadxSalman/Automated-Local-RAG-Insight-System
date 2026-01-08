@@ -9,69 +9,66 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 1. Health Check Route (to avoid "Cannot GET /" errors)
-app.get('/', (req, res) => {
-  res.send('🚀 ALRIS Backend Engine is Online');
-});
-
 app.post('/ask', async (req, res) => {
-  // Ensure we handle both 'query' and 'question' naming from frontend
-  const query = req.body.query || req.body.question;
-
-  if (!query) {
-    return res.status(400).json({ error: "No query provided" });
-  }
-
   try {
+    const { query } = req.body;
+    if (!query) return res.status(400).json({ error: "Query is required" });
+
     const collection = client.collections.get('ALRIS_Documents');
 
-    // 1. Retrieval (Semantic Search)
-    const result = await collection.query.nearText(query, { 
-      limit: 3 
+    // 1. Hybrid Retrieval
+    // Llama-3.2-3B is efficient enough that we can increase the context limit
+    const result = await collection.query.hybrid(query, {
+      limit: 6, 
+      alpha: 0.5,
     });
 
     if (result.objects.length === 0) {
       return res.json({ 
-        answer: "I couldn't find any relevant information in your documents.",
+        answer: "I couldn't find any relevant data in the local files.", 
         sources: [] 
       });
     }
 
-    // 2. Combine results and TRUNCATE to stay within model token limits
-    // BART-Large-CNN fails if the input is too long. 
-    // We truncate the context to ~3000 characters to be safe.
+    // 2. Format Context
     const context = result.objects
-      .map(o => o.properties.content)
-      .join("\n\n")
-      .substring(0, 3000);
+      .map(o => `Source: ${o.properties.fileName}\nContent: ${o.properties.content}`)
+      .join("\n\n---\n\n");
 
-    // 3. Generation (Summarization/RAG)
-    const summary = await hf.summarization({
-      model: "facebook/bart-large-cnn",
-      inputs: `Context: ${context}\n\nQuestion: ${query}\n\nAnswer:`,
-      parameters: {
-        max_length: 150,
-        min_length: 40,
-        do_sample: false
-      }
+    // 3. Chat Completion with Llama-3.2-3B-Instruct
+    const response = await hf.chatCompletion({
+      model: "meta-llama/Llama-3.2-3B-Instruct",
+      messages: [
+        {
+          role: "system",
+          content: "You are the ALRIS AI assistant. Provide concise answers based ONLY on the provided context. If the answer is not available, say you don't know."
+        },
+        {
+          role: "user",
+          content: `Context:\n${context}\n\nQuestion: ${query}`
+        }
+      ],
+      max_tokens: 500,
+      temperature: 0.1, // Keep it precise
     });
 
     // 4. Send Response
     res.json({ 
-      answer: summary.summary_text, 
-      sources: [...new Set(result.objects.map(o => o.properties.fileName))] // Unique filenames
+      answer: response.choices[0].message.content.trim(),
+      sources: [...new Set(result.objects.map(o => o.properties.fileName))]
     });
 
   } catch (error) {
-    console.error("❌ Backend Error:", error);
+    console.error("ALRIS Engine Error:", error);
+    
+    // Fallback if the specific provider is down
     res.status(500).json({ 
-      error: "Error processing your request.",
-      details: error.message 
+      error: "The Llama engine encountered an error. This usually happens if the Hugging Face provider is overloaded." 
     });
   }
 });
 
 const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
-  console.log(`🚀 ALRIS Server running at http://localhost:${PORT}`);
+  console.log(`🚀 ALRIS Llama-Engine running at http://localhost:${PORT}`);
 });
