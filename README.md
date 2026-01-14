@@ -19,7 +19,7 @@ Built with **Node.js**, **Weaviate Cloud**, and **Hugging Face**, this project o
 * **Hybrid Retrieval:** Balances Vector Similarity (semantic) and BM25 (keyword) search with a tuned  for optimal results.
 * **Llama-3.2 Powered:** Utilizes `Llama-3.2-3B-Instruct` for concise, context-aware synthesis of your data.
 * **High-Performance Embeddings:** Powered by `Snowflake/snowflake-arctic-embed-l-v2.0` for high-dimensional semantic mapping.
-* **Modern Dashboard:** A sleek **Next.js 15** frontend with a responsive dark-mode UI, Lucide icons, and real-time processing animations.
+* **Modern Dashboard:** A sleek **Next.js 15** frontend with a responsive dark-mode UI, Lucide icons, and real-time processing animation.
 * **Privacy-Centric:** Your raw data stays local; only anonymized vectors are used for cloud-based indexing and inference.
 
 ---
