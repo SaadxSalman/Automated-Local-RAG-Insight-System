@@ -9,7 +9,7 @@
 
 **ALRIS** is a high-performance, full-stack Retrieval-Augmented Generation (RAG) engine designed to transform your local file system into a searchable intelligence hub. By leveraging **Hybrid Vector Search**, ALRIS understands semantic intent and keyword precision to provide high-accuracy insights from your private data.
 
-Built with **Node.js**, **Weaviate Cloud**, and **Hugging Face**, this project offers a professional-grade, local-first approach to AI-driven document retrieval and analysis.
+Built with **Node.js**, **Weaviate Cloud**, and **Hugging Face**, this project offers a professional-grade, local-first approach to AI-driven document retrieval and analysis..
 
 ---
 
