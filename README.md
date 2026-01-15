@@ -150,6 +150,6 @@ npm run dev
 
 ---
 
-Developed with ❤️ by **[Saad Salman](https://www.google.com/search?q=https://github.com/saadxsalman)**
+Developed with ❤️ by **[SaadxSalman](https://www.google.com/search?q=https://github.com/saadxsalman)**
 
 ---
